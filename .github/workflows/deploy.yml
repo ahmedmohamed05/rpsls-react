@@ -1,47 +1,42 @@
-name: Deploy
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - main # or your default branch
 
 jobs:
   build:
-    name: Build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: npm install
 
       - name: Build project
         run: npm run build
 
-      - name: Upload production-ready build files
-        uses: actions/upload-artifact@v2
+      - name: Upload build output
+        uses: actions/upload-artifact@v3
         with:
-          name: production-files
+          name: build-output
           path: ./dist
 
   deploy:
-    name: Deploy
-    needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    needs: build
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download build output
+        uses: actions/download-artifact@v3
         with:
-          name: production-files
+          name: build-output
           path: ./dist
 
       - name: Deploy to GitHub Pages
