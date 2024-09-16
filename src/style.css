@@ -1,0 +1,393 @@
+:root {
+  --dark-text: hsl(229, 25%, 31%);
+  --score-text: hsl(229, 64%, 46%);
+  --header-outline: hsl(217, 16%, 45%);
+
+  --bg: hsl(214, 47%, 23%), hsl(237, 49%, 15%);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+*:has(::before, ::after) {
+  box-sizing: border-box;
+}
+img,
+video,
+picture {
+  max-width: 100%;
+}
+ul,
+ol {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
+input,
+textarea {
+  outline: none;
+}
+button {
+  user-select: none;
+}
+
+/* General */
+body {
+  font-family: "Barlow Semi Condensed", sans-serif;
+  font-weight: 600;
+}
+
+.wrapper {
+  background-image: radial-gradient(ellipse at top, var(--bg));
+  min-height: 100dvh;
+  color: white;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Start overlay when rules are open */
+.wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100dvh;
+  background-color: hsla(0, 0%, 0%, 0.5);
+  display: none;
+}
+
+.wrapper:has(.rules-card.open)::after {
+  display: block;
+}
+/* End overlay when rules are open */
+
+/* Start score bar */
+.score-bar {
+  margin: 2rem auto 0;
+  width: fit-content;
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-tracks: center;
+  width: min(750px, 90%);
+  outline: solid 3px var(--header-outline);
+}
+
+.score-bar .score {
+  background-color: white;
+  padding-inline: 2.5rem;
+  text-align: center;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.score-bar .score span {
+  color: var(--score-text);
+}
+.score-bar .score .text {
+  text-transform: uppercase;
+  font-size: 1.15em;
+  letter-spacing: 2px;
+  display: block;
+}
+
+.score-bar .score .number {
+  font-size: 3em;
+  color: var(--dark-text);
+}
+/* End score bar */
+
+/* Start Game */
+.game {
+  margin-block-start: 4rem;
+}
+@media (max-width: 768px) {
+  .game {
+    margin-block-start: 1rem;
+  }
+}
+
+.game .items-line-map {
+  position: relative;
+  width: min(750px, 90%);
+  margin-inline: auto;
+}
+
+.game .items-line-map > * {
+  position: absolute;
+  left: 50%;
+  translate: -50%;
+}
+
+/* TODO: add depth effect to the borders */
+.game .game-item {
+  position: relative;
+  width: 130px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  transition: 100ms;
+}
+
+.game-item:has(button:is(:active, :hover)) {
+  transform: scale(1.1);
+}
+
+/* Start items positions */
+.game-item.scissors {
+  top: -30px;
+}
+.game-item.paper {
+  left: 150px;
+  top: -61px;
+}
+.game-item.rock {
+  left: 85px;
+  top: -27px;
+}
+.game-item.lizard {
+  left: -101px;
+  top: -153px;
+}
+.game-item.spock {
+  left: -155px;
+  top: -449px;
+}
+
+/* End items positions */
+
+.game .game-item button {
+  all: unset;
+  cursor: pointer;
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+  .game .game-item {
+    width: 100px;
+  }
+  .game-item img {
+    width: 30px;
+  }
+  .game-item.scissors {
+    top: -30px;
+  }
+  .game-item.paper {
+    left: 122px;
+    top: -36px;
+  }
+  .game-item.rock {
+    left: 85px;
+    top: 43px;
+  }
+  .game-item.lizard {
+    left: -101px;
+    top: -56px;
+  }
+  .game-item.spock {
+    left: -124px;
+    top: -332px;
+  }
+}
+/* End Game */
+
+/* Start rules card */
+.rules-card.close {
+  display: none;
+}
+
+.rules-card.open {
+  --_close-btn-width: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  background-color: white;
+  color: var(--dark-text);
+  padding: 0.75rem;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .rules-card.open {
+    text-align: center;
+    padding-block: 5.5rem;
+    width: 100%;
+    height: 100dvh;
+    border-radius: 0;
+  }
+}
+
+.rules-card .text {
+  width: calc(100% - var(--_close-btn-width));
+  font-size: 1.75em;
+}
+
+.close-btn {
+  width: var(--_close-btn-width);
+}
+
+.close-btn button {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: 500ms ease-in-out;
+  &:is(:hover, :focus) {
+    rotate: 360deg;
+  }
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .close-btn {
+    order: 3;
+    width: 100%;
+  }
+}
+
+.card-image {
+  margin: auto;
+  margin-block: 1.5rem;
+}
+
+/* End rules card */
+
+/* Start show rules button */
+.rules {
+  --_position: 2.5rem;
+  width: fit-content;
+  position: absolute;
+  right: var(--_position);
+  bottom: var(--_position);
+}
+
+@media (max-width: 768px) {
+  .rules {
+    right: 0;
+    left: 50%;
+    translate: -50%;
+  }
+}
+
+.rules button {
+  all: unset;
+  transition: 200ms;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.2em;
+  border: 1px solid white;
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:is(:hover, :focus) {
+    background-color: white;
+    border-color: var(--dark-text);
+    color: var(--dark-text);
+  }
+}
+
+/* End show rules button */
+
+/* Start Game Result */
+.result {
+  width: min(750px, 90%);
+  margin-inline: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.result .choice {
+  text-align: center;
+}
+
+.result .choice.winner .choice-icon {
+  --_shadow-size: 40px;
+  box-shadow: 0 0 0px var(--_shadow-size) hsla(0, 0%, 100%, 0.1),
+    0 0 0 calc(var(--_shadow-size) * 2) hsla(0, 0%, 100%, 0.05),
+    0 0 0 calc(var(--_shadow-size) * 3) hsla(0, 0%, 100%, 0.02);
+}
+
+.result .choice p {
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.result .choice .choice-icon {
+  width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+  border: solid 5px;
+  border-radius: 50%;
+  margin-block: 2.5rem;
+  background-color: white;
+  position: relative;
+  aspect-ratio: 1/1;
+}
+@media (max-width: 768px) {
+  .result .choice .choice-icon {
+    width: 140px;
+  }
+}
+
+.result .result-middle {
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 768px) {
+  .result .result-middle {
+    order: 3;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.result .result-middle .text p {
+  font-size: 3em;
+  font-weight: bold;
+}
+@media (max-width: 768px) {
+  .result .result-middle .text p {
+    font-size: 2em;
+  }
+}
+
+.result .result-middle .btn {
+  all: unset;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  border: solid 1px transparent;
+  border-radius: 10px;
+  color: var(--dark-text);
+  text-align: center;
+  cursor: pointer;
+  transition: 200ms;
+  margin-block-start: 1rem;
+  &:is(:hover, :active) {
+    background-color: transparent;
+    color: white;
+    border-color: white;
+  }
+}
+/* End Game Result */
